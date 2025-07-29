@@ -1,36 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "../components/AuthProvider";
+import { useAuth } from "../../redux/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { login } = useAuth();
+  const router = useRouter();
+  const { login, loading, error, clearAuthError } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    clearAuthError();
 
-    // Simulate login process
-    try {
-      // Here you would typically make an API call to authenticate
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (username.trim() && password.trim()) {
+      try {
+        // Gọi API login thật
+        const result = await login({ username, password });
 
-      // For demo purposes, accept any non-empty username/password
-      if (username.trim() && password.trim()) {
-        // Use the login function from AuthProvider
-        login(username);
-      } else {
-        setError("Vui lòng nhập tài khoản và mật khẩu");
+        if (result.meta.requestStatus === "fulfilled") {
+          // Redirect to dashboard
+          router.push("/dashboard");
+        }
+      } catch (err) {
+        console.error("Login error:", err);
       }
-    } catch (err) {
-      setError("Đăng nhập thất bại. Vui lòng thử lại.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -43,9 +38,6 @@ export default function LoginPage() {
           <h2 className="text-xl font-medium text-gray-600">
             Đăng nhập vào hệ thống
           </h2>
-          <p className="mt-2 text-sm text-gray-500">
-            Hệ thống quản lý nông trại thông minh
-          </p>
         </div>
 
         {/* Login Form */}
@@ -102,10 +94,10 @@ export default function LoginPage() {
             <div>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={loading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? (
+                {loading ? (
                   <div className="flex items-center">
                     <svg
                       className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
@@ -135,18 +127,6 @@ export default function LoginPage() {
               </button>
             </div>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-md">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">
-              Thông tin demo:
-            </h3>
-            <p className="text-xs text-gray-600">
-              Tài khoản: <span className="font-mono">admin</span>
-              <br />
-              Mật khẩu: <span className="font-mono">password</span>
-            </p>
-          </div>
         </div>
       </div>
     </div>

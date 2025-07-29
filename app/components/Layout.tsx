@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../../redux/hooks/useAuth";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [activeSubmenu, setActiveSubmenu] = useState("");
-  const { username, logout } = useAuth();
+  const { user, logoutUser } = useAuth();
   const pathname = usePathname();
 
   // Update active menu and submenu based on current pathname
@@ -26,7 +26,19 @@ export default function Layout({ children }: LayoutProps) {
       setActiveSubmenu(subPath || "overview");
     } else if (path === "craw-data") {
       setActiveMenu("craw-data");
-      setActiveSubmenu(subPath || "new-task");
+      setActiveSubmenu(subPath || "target-pages");
+    } else if (path === "posts") {
+      setActiveMenu("craw-data");
+      setActiveSubmenu("posts");
+    } else if (path === "users") {
+      setActiveMenu("craw-data");
+      setActiveSubmenu("users");
+    } else if (path === "comments") {
+      setActiveMenu("craw-data");
+      setActiveSubmenu("comments");
+    } else if (path === "post-fb") {
+      setActiveMenu("post");
+      setActiveSubmenu(subPath || "create");
     } else if (path === "post") {
       setActiveMenu("post");
       setActiveSubmenu(subPath || "create");
@@ -42,12 +54,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div className="h-screen bg-gray-100 flex flex-col overflow-hidden">
       {/* Header */}
-      <Header
-        activeMenu={activeMenu}
-        onMenuChange={setActiveMenu}
-        username={username}
-        onLogout={logout}
-      />
+      <Header activeMenu={activeMenu} onMenuChange={setActiveMenu} />
 
       {/* Main Content */}
       <div className="flex flex-1 min-h-0">

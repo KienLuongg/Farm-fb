@@ -22,15 +22,16 @@ const subMenus: Record<string, SubMenuItem[]> = {
     { id: "reports", label: "Báo cáo", href: "/dashboard/reports" },
   ],
   "craw-data": [
-    { id: "new-task", label: "Tác vụ mới", href: "/craw-data" },
-    { id: "history", label: "Lịch sử craw", href: "/craw-data/history" },
-    { id: "settings", label: "Cài đặt craw", href: "/craw-data/settings" },
+    { id: "target-pages", label: "Target Pages", href: "/craw-data" },
+    { id: "posts", label: "Posts", href: "/posts" },
+    { id: "users", label: "Users", href: "/users" },
+    { id: "comments", label: "Comments", href: "/comments" },
   ],
   post: [
-    { id: "create", label: "Tạo bài đăng", href: "/post" },
-    { id: "drafts", label: "Bản nháp", href: "/post/drafts" },
-    { id: "scheduled", label: "Đã lên lịch", href: "/post/scheduled" },
-    { id: "published", label: "Đã đăng", href: "/post/published" },
+    { id: "create", label: "Tạo bài đăng", href: "/post-fb" },
+    { id: "tasks", label: "Quản lý Tasks", href: "/post-fb/tasks" },
+    { id: "history", label: "Lịch sử đăng", href: "/post-fb/history" },
+    { id: "test-connection", label: "Test kết nối", href: "/post-fb/test" },
   ],
   reports: [
     { id: "sales", label: "Báo cáo bán hàng", href: "/reports/sales" },

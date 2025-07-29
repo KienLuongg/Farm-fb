@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "../../redux/hooks/useAuth";
 
 interface MenuItem {
   id: string;
@@ -18,24 +19,18 @@ const menuItems: MenuItem[] = [
     href: "/craw-data",
     hasSubmenu: false,
   },
-  { id: "post", label: "Đăng bài", href: "/post", hasSubmenu: true },
-  { id: "reports", label: "Báo cáo", href: "/reports", hasSubmenu: true },
+  { id: "post", label: "Đăng bài", href: "/post-fb", hasSubmenu: true },
+  // { id: "reports", label: "Báo cáo", href: "/reports", hasSubmenu: true },
   { id: "settings", label: "Cài đặt", href: "/settings", hasSubmenu: false },
 ];
 
 interface HeaderProps {
   activeMenu: string;
   onMenuChange: (menuId: string) => void;
-  username?: string | null;
-  onLogout?: () => void;
 }
 
-export default function Header({
-  activeMenu,
-  onMenuChange,
-  username,
-  onLogout,
-}: HeaderProps) {
+export default function Header({ activeMenu, onMenuChange }: HeaderProps) {
+  const { user, isAuthenticated, logoutUser } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -69,14 +64,14 @@ export default function Header({
 
           {/* User Menu */}
           <div className="hidden md:flex items-center space-x-4">
-            {username && (
+            {isAuthenticated && user && (
               <span className="text-sm text-gray-700">
-                Xin chào, <span className="font-medium">{username}</span>
+                Xin chào, <span className="font-medium">{user.full_name}</span>
               </span>
             )}
-            {onLogout && (
+            {isAuthenticated && (
               <button
-                onClick={onLogout}
+                onClick={logoutUser}
                 className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50 transition-colors"
               >
                 Đăng xuất
